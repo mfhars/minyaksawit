@@ -46,11 +46,25 @@ else:
     # Set the column headers for the merged DataFrame using the all_headers list
     merged_df.columns = all_headers
 
-    # Select every other column starting from the 2nd column (0-indexed)
-    merged_df = merged_df.iloc[:, ::2]
+    # Print number of columns before selection
+    print("Number of columns before selection:")
+    print(merged_df.shape[1])
 
-    print(f"Number of files read: {file_count}")
-    print(f"Number of rows before merge: {row_count_before_merge}")
+# Select every other column starting from the 2nd column (0-indexed)
+merged_df = merged_df.iloc[:, ::2]
+
+# Create a boolean mask for duplicated columns
+dup_mask = merged_df.columns.duplicated(keep='first')
+
+# Select only the non-duplicated columns
+merged_df = merged_df.loc[:, ~dup_mask]
+
+# Print number of columns after selection
+print("Number of columns after selection:")
+print(merged_df.shape[1])
+
+print(f"Number of files read: {file_count}")
+print(f"Number of rows before merge: {row_count_before_merge}")
 
 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
